@@ -51,14 +51,18 @@ switch ($_GET['p'])
 		RewritePageTitle("Communications Block List");
 		$page = TEMPLATES_PATH ."/page.commslist.php";
 		break;
-	case "servers":
-		RewritePageTitle("Server List");
-		$page = TEMPLATES_PATH . "/page.servers.php";
-		break;
-	case "serverinfo":
-		RewritePageTitle("Server Info");
-		$page = TEMPLATES_PATH . "/page.serverinfo.php";
-		break;
+        case "servers":
+                RewritePageTitle("Server List");
+                $page = TEMPLATES_PATH . "/page.servers.php";
+                break;
+        case "screenshots":
+                RewritePageTitle("Screenshots");
+                $page = TEMPLATES_PATH . "/page.screenshots.php";
+                break;
+        case "serverinfo":
+                RewritePageTitle("Server Info");
+                $page = TEMPLATES_PATH . "/page.serverinfo.php";
+                break;
 	case "protest":
 		RewritePageTitle("Protest a Ban");
 		$page = TEMPLATES_PATH . "/page.protest.php";
