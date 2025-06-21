@@ -153,8 +153,8 @@ if($data !== false){
             exit;
         }
 
-        setcookie("aid", $aid, time() + LOGIN_COOKIE_LIFETIME, "/");
-        setcookie("password", $password, time() + LOGIN_COOKIE_LIFETIME, "/");
+        setcookie("aid", $aid, time() + LOGIN_COOKIE_LIFETIME, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
+        setcookie("password", $password, time() + LOGIN_COOKIE_LIFETIME, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
         $mysqli->close();
         header("Location: " .SB_URL ."/index.php?p=admin");
         exit;
