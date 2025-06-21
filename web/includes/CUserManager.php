@@ -203,15 +203,15 @@ class CUserManager
 	        if($save)
 	        {
 	            //Sets cookies
-	            setcookie("aid", $aid, time()+LOGIN_COOKIE_LIFETIME);
-	            setcookie("password", $this->encrypt_password($password), time()+LOGIN_COOKIE_LIFETIME);
-	            setcookie("user", isset($_SESSION['user']['user'])?$_SESSION['user']['user']:null, time()+LOGIN_COOKIE_LIFETIME);
+                    setcookie("aid", $aid, time() + LOGIN_COOKIE_LIFETIME, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
+                    setcookie("password", $this->encrypt_password($password), time() + LOGIN_COOKIE_LIFETIME, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
+                    setcookie("user", isset($_SESSION['user']['user']) ? $_SESSION['user']['user'] : null, time() + LOGIN_COOKIE_LIFETIME, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
 	        }
 	        else 
 	        {
-	        	setcookie("aid", $aid);
-	            setcookie("password", $this->encrypt_password($password));
-	            setcookie("user", $_SESSION['user']['user']);
+                        setcookie("aid", $aid, 0, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
+                    setcookie("password", $this->encrypt_password($password), 0, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
+                    setcookie("user", $_SESSION['user']['user'], 0, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
 	        }
 	        return true;
 	    }

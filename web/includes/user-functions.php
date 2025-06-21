@@ -62,11 +62,11 @@ function generate_salt($length=5)
  * @return true.
  */
 function logout() {
-	setcookie('aid', '', time()-86400);
-	setcookie('password', '', time()-86400);
-	$_SESSION = array();
-	session_destroy();
-	return true;
+        setcookie('aid', '', time() - 86400, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
+        setcookie('password', '', time() - 86400, COOKIE_PATH, COOKIE_DOMAIN, COOKIE_SECURE);
+        $_SESSION = array();
+        session_destroy();
+        return true;
 }
 
 /**
