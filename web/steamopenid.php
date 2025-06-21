@@ -131,7 +131,8 @@ function steamOauth() {
 
 
 if(isset($_COOKIE['aid'])){
-    header("Location: " .SB_URL);
+    header("Location: " .SB_URL . "/index.php?p=admin");
+    exit;
 }
 
 $data = steamOauth();
@@ -147,17 +148,22 @@ if($data !== false){
         list($aid, $password) = $resultado->fetch_row();
         global $userbank;
         if (empty($password) || $password == $userbank->encrypt_password('')) {
+            $mysqli->close();
             header("Location: " .SB_URL ."/index.php?p=login&m=empty_pwd");
-            die;
-        } else {
-            setcookie("aid", $aid, time() + LOGIN_COOKIE_LIFETIME);
-            setcookie("password", $password, time() + LOGIN_COOKIE_LIFETIME);
+            exit;
         }
+
+        setcookie("aid", $aid, time() + LOGIN_COOKIE_LIFETIME, "/");
+        setcookie("password", $password, time() + LOGIN_COOKIE_LIFETIME, "/");
+        $mysqli->close();
+        header("Location: " .SB_URL ."/index.php?p=admin");
+        exit;
     }
 
     $mysqli->close();
+    header("Location: " .SB_URL ."/index.php?p=login");
+    exit;
 }else{
     header("Location: " .SB_URL ."/index.php?p=login");
+    exit;
 }
-
-header("Location: " .SB_URL);
