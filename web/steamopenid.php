@@ -94,7 +94,7 @@ function sb_big_div2($a)
     $len = strlen($a);
     for ($i = 0; $i < $len; $i++) {
         $num = $carry * 10 + (int)$a[$i];
-        $result .= intdiv($num, 2);
+        $result .= (int)($num / 2);
         $carry = $num % 2;
     }
     $result = ltrim($result, '0');
