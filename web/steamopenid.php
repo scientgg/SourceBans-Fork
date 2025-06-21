@@ -32,6 +32,75 @@ include_once 'config.php';
 include_once INCLUDES_PATH . '/system-functions.php';
 require_once 'includes/openid.php';
 
+// Convert Steam 64 bit IDs to STEAM_X:Y:Z without relying on 64-bit extensions
+function sb_convert64to32($friendid)
+{
+    if (!preg_match('/^[0-9]+$/', $friendid)) {
+        return false;
+    }
+
+    $offset = '76561197960265728';
+    $diff = sb_big_sub($friendid, $offset);
+    if ($diff === false) {
+        return false;
+    }
+
+    $server = sb_big_mod2($diff);
+    if ($server == 1) {
+        $diff = sb_big_sub($diff, '1');
+    }
+    $auth = sb_big_div2($diff);
+    return 'STEAM_0:' . $server . ':' . $auth;
+}
+
+function sb_big_sub($a, $b)
+{
+    $a = ltrim($a, '0');
+    $b = ltrim($b, '0');
+    if (strlen($a) < strlen($b) || (strlen($a) === strlen($b) && strcmp($a, $b) < 0)) {
+        return false;
+    }
+    $a = strrev($a);
+    $b = strrev($b);
+    $carry = 0;
+    $res = '';
+    $len = strlen($a);
+    for ($i = 0; $i < $len; $i++) {
+        $da = (int)$a[$i];
+        $db = $i < strlen($b) ? (int)$b[$i] : 0;
+        $digit = $da - $db - $carry;
+        if ($digit < 0) {
+            $digit += 10;
+            $carry = 1;
+        } else {
+            $carry = 0;
+        }
+        $res .= $digit;
+    }
+    $res = strrev($res);
+    $res = ltrim($res, '0');
+    return $res === '' ? '0' : $res;
+}
+
+function sb_big_mod2($a)
+{
+    return ((int)substr($a, -1)) & 1;
+}
+
+function sb_big_div2($a)
+{
+    $result = '';
+    $carry = 0;
+    $len = strlen($a);
+    for ($i = 0; $i < $len; $i++) {
+        $num = $carry * 10 + (int)$a[$i];
+        $result .= intdiv($num, 2);
+        $carry = $num % 2;
+    }
+    $result = ltrim($result, '0');
+    return $result === '' ? '0' : $result;
+}
+
 define('SB_HOST', SB_WP_URL);
 define('SB_URL', SB_WP_URL);
 
@@ -68,7 +137,7 @@ if(isset($_COOKIE['aid'])){
 $data = steamOauth();
 
 if($data !== false){
-    $data = FriendIDToSteamID($data);
+    $data = sb_convert64to32($data);
 
     $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if(defined('DB_PREFIX')){ $prfx = DB_PREFIX ."_"; }else{ $prfx = ""; }
